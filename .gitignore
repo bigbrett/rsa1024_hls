@@ -1,0 +1,12 @@
+# Blacklist files/folders in same directory as the .gitignore file
+*
+!*/
+
+# Whitelist some files
+!.gitignore
+
+# "/" is NOT optional when followed by a *
+!src/*.cpp
+!src/*.hpp
+!/solution*/directives.tcl
+!/solution*/script.tcl
