@@ -19,11 +19,12 @@ using namespace hls;
 using namespace std;
 
 #define NUM_BITS 1024
-
+#define MEMWORD_SIZE 32
+#define NUM_MEMWORDS 32
 
 // arbitrary precision for RSA
 typedef ap_uint<NUM_BITS> uintRSA_t; // 1024 bit unsigned integer
-
+typedef ap_uint<MEMWORD_SIZE> memword_t; // 32 bits
 
 
 
