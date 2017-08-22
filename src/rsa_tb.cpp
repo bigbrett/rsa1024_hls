@@ -14,12 +14,48 @@ static void printReverse(uintRSA_t in)
 	cout << "{" << hex << in.range(7,0);
 	for (int i=1; i<128; i++)
 	{
-//		unsigned char foo = in.range(8*i+7,8*i);
+		unsigned char foo = in.range(8*i+7,8*i);
 		printf(",0x%02X",(unsigned char)in.range(8*i+7,8*i));
 	}
 	cout << "};" << endl;
 }
 
+
+static void printWords(uintRSA_t in,bool endian)
+{
+
+	if (endian)
+	{
+		cout << "{";
+		for (int i=0; i<32; i++)
+		{
+			//		cout<< hex << in.range(32*i+31,32*i) << endl;
+			ap_uint<32> foo = in.range(32*i+31,32*i);
+			printf("0x%02X%02X%02X%02X",(unsigned char)foo.range(7,0),
+					(unsigned char)foo.range(15,8),
+					(unsigned char)foo.range(23,16),
+					(unsigned char)foo.range(31,24));
+			if (i!= 31)
+				cout << ", ";
+		}
+		cout << "};" << endl;
+	}
+	else
+	{
+		cout << "{";
+		for (int i=0; i<32; i++)
+		{
+			ap_uint<32> foo = in.range(32*i+31,32*i);
+			printf("0x%02X%02X%02X%02X",(unsigned char)foo.range(31,24),
+					(unsigned char)foo.range(23,16),
+					(unsigned char)foo.range(15,8),
+					(unsigned char)foo.range(7,0));
+			if (i!= 31)
+				cout << ", ";
+		}
+		cout << "};"<<endl;
+	}
+}
 
 
 int main()
@@ -67,76 +103,94 @@ int main()
 		return 1;
 	}
 #elif sel==3
-		uintRSA_t ciphertext   = 2790;
-		uintRSA_t pub_exp   = 2753;
-		uintRSA_t modulus   = 3233;
-		uintRSA_t Mbar = 1330;
-		uintRSA_t xbar = 1785;
-		int plaintext = 65;
+	uintRSA_t ciphertext   = 2790;
+	uintRSA_t pub_exp   = 2753;
+	uintRSA_t modulus   = 3233;
+	uintRSA_t Mbar = 1330;
+	uintRSA_t xbar = 1785;
+	int plaintext = 65;
 
-		if (NUM_BITS != 1024)
-		{
-			cerr << "Incorrect bitwidth specified" << endl;
-//			return 1;
-		}
+	if (NUM_BITS != 1024)
+	{
+		cerr << "Incorrect bitwidth specified" << endl;
+		//			return 1;
+	}
 #elif sel == 4
-		uintRSA_t ciphertext   = 1570;
-		uintRSA_t pub_exp   = 1019;
-		uintRSA_t modulus   = 3337;
-		uintRSA_t Mbar = 1966;
-		uintRSA_t xbar = 2216;
-		int plaintext = 688;
+	uintRSA_t ciphertext   = 1570;
+	uintRSA_t pub_exp   = 1019;
+	uintRSA_t modulus   = 3337;
+	uintRSA_t Mbar = 1966;
+	uintRSA_t xbar = 2216;
+	int plaintext = 688;
 
-		if (NUM_BITS != 1024)
-		{
-			cerr << "Incorrect bitwidth specified" << endl;
-			return 1;
-		}
+	if (NUM_BITS != 1024)
+	{
+		cerr << "Incorrect bitwidth specified" << endl;
+		return 1;
+	}
 #endif
 
 
-//	uintRSA_t Mbar0=0,xbar0;
-//	ap_uint<NUM_BITS+1> r = ap_uint<NUM_BITS+1>("10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",16);
-//	interleaveModMult(r,M,n,&Mbar0);
-//	interleaveModMult(r,ap_uint<NUM_BITS>(1),n,&xbar0);
-//
-//	if ((Mbar0 != Mbar) || (xbar0 != xbar))
-//	{
-//		cout << "FAILURE" << endl;
-//		returnval = 1;
-//	}
-//	else
-//		cout << "SUCCESS!" << endl;
+	//	uintRSA_t Mbar0=0,xbar0;
+	//	ap_uint<NUM_BITS+1> r = ap_uint<NUM_BITS+1>("10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",16);
+	//	interleaveModMult(r,M,n,&Mbar0);
+	//	interleaveModMult(r,ap_uint<NUM_BITS>(1),n,&xbar0);
+	//
+	//	if ((Mbar0 != Mbar) || (xbar0 != xbar))
+	//	{
+	//		cout << "FAILURE" << endl;
+	//		returnval = 1;
+	//	}
+	//	else
+	//		cout << "SUCCESS!" << endl;
 
 
+	cout << "uint32_t publexp_arr[]  = ";printWords(pub_exp,false);
+	cout << "uint32_t modulus_arr[] = ";printWords(modulus,false);
+	cout << "uint32_t ciphertext_golden_ans[] = ";printWords(ciphertext,false);
+	cout << "uint32_t plaintext_golden_ans[] = ";printWords(plaintext,false);
+	cout << "ENDIAN SWAP" << endl;
+	cout << "uint32_t publexp_arr[]  = ";printWords(pub_exp,true);
+	cout << "uint32_t modulus_arr[] = ";printWords(modulus,true);
+	cout << "uint32_t ciphertext_golden_ans[] = ";printWords(ciphertext,true);
+	cout << "uint32_t plaintext_golden_ans[] = ";printWords(plaintext,true);
 
 
-
-	memword_t priv_mem[NUM_MEMWORDS];
+	memword_t priv_mem[NUM_MEMWORDS],plaintext_mem[NUM_MEMWORDS],
+		      publexp_mem[NUM_MEMWORDS],modulus_mem[NUM_MEMWORDS],ciphertext_mem[NUM_MEMWORDS];
 	for (int i=0; i<NUM_MEMWORDS; i++) {
 		priv_mem[i] = priv_exp.range(MEMWORD_SIZE*i+(MEMWORD_SIZE-1),MEMWORD_SIZE*i);
-		cout << "privkey["<<dec<<i<<"] = " << hex << priv_mem[i] << endl;
+		plaintext_mem[i] = plaintext.range(MEMWORD_SIZE*i+(MEMWORD_SIZE-1),MEMWORD_SIZE*i);
+		modulus_mem[i] = modulus.range(MEMWORD_SIZE*i+(MEMWORD_SIZE-1),MEMWORD_SIZE*i);
+		publexp_mem[i] = pub_exp.range(MEMWORD_SIZE*i+(MEMWORD_SIZE-1),MEMWORD_SIZE*i);
+		ciphertext_mem[i] = ciphertext.range(MEMWORD_SIZE*i+(MEMWORD_SIZE-1),MEMWORD_SIZE*i);
 	}
 
-	uintRSA_t enc_res=0,dec_res=0;
-//	rsaModExp(M,e,n,r,&res);
+	memword_t enc_res[NUM_MEMWORDS]=0,dec_res[NUM_MEMWORDS]=0;
+	ap_uint<4> mode_out;
 
-	RSAmode_t mode = ENCRYPT;
-	wsrsa1024(priv_mem,mode,uintRSA_t(plaintext),pub_exp,modulus,&enc_res);
+	//	rsaModExp(M,e,n,r,&res);
+	RSAmode_t mode = INIT;
+	wsrsa1024(priv_mem,mode,plaintext_mem,publexp_mem,modulus_mem,enc_res,&mode_out);
+
+	mode = ENCRYPT;
+	wsrsa1024(priv_mem,mode,plaintext_mem,publexp_mem,modulus_mem,enc_res,&mode_out);
 	cout << "enc result = " << hex << enc_res << endl;
-	if (enc_res != ciphertext)
+	if (0 != memcmp(enc_res,ciphertext_mem,sizeof(enc_res)) )
 	{
 		cout << "ENCRYPT Failed !!!" << endl;
 		return -1;
 	}
 
 	mode = DECRYPTKEYINIT;
-	wsrsa1024(priv_mem,mode,ciphertext,pub_exp,modulus,&dec_res);
+	wsrsa1024(priv_mem,mode,ciphertext_mem,publexp_mem,modulus_mem,dec_res,&mode_out);
+	mode = INIT;
+	wsrsa1024(priv_mem,mode,ciphertext_mem,publexp_mem,modulus_mem,dec_res,&mode_out);
 
 	mode = DECRYPT;
-	wsrsa1024(priv_mem,mode,ciphertext,pub_exp,modulus,&dec_res);
+	wsrsa1024(priv_mem,mode,ciphertext_mem,publexp_mem,modulus_mem,dec_res,&mode_out);
 	cout << "dec result = " << hex << dec_res << endl;
-	if (dec_res != plaintext)
+	if (0 != memcmp(dec_res,plaintext_mem,sizeof(enc_res)) )
 	{
 		cout << "DECRYPT Failed !!!" << endl;
 		return -1;

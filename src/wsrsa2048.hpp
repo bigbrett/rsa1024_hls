@@ -4,13 +4,14 @@
 #include "globals.hpp"
 #include "rsaModExp.hpp"
 
-typedef enum { ENCRYPT=0, DECRYPT=1, DECRYPTKEYINIT=2} RSAmode_t;
+typedef enum { ENCRYPT=0, DECRYPT=1, DECRYPTKEYINIT=2, INIT=3} RSAmode_t;
 
 void wsrsa1024( memword_t privexp[NUM_MEMWORDS],  // private exponent
 				RSAmode_t mode,
-				uintRSA_t base,     // base (plain/cipher)text
-				uintRSA_t publexp,  // public exponent
-				uintRSA_t modulus,  // shared modulus
-				uintRSA_t *result );
+				memword_t base_mem[NUM_MEMWORDS],
+				memword_t publexp_mem[NUM_MEMWORDS],
+				memword_t modulus_mem[NUM_MEMWORDS],
+				memword_t result_mem[NUM_MEMWORDS],
+				ap_uint<4> *mode_out);
 
 #endif
