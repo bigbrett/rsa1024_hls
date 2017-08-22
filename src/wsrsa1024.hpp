@@ -1,5 +1,5 @@
-#ifndef WSRSA2048_HPP_
-#define WSRSA2048_HPP_
+#ifndef WSRSA1024_HPP_
+#define WSRSA1024_HPP_
 
 #include "globals.hpp"
 #include "rsaModExp.hpp"
