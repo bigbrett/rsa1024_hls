@@ -1,4 +1,4 @@
-#include "wsrsa2048.hpp"
+#include "wsrsa1024.hpp"
 
 void wsrsa1024( memword_t privexp[NUM_MEMWORDS],    // BRAM holding private exponent
 				RSAmode_t mode,     // mode: encrypt, decrypt, or load private exponent from BRAM
