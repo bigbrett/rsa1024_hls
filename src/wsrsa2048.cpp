@@ -11,10 +11,12 @@ void wsrsa1024( memword_t privexp[NUM_MEMWORDS],  // private exponent
 
 	static uintRSA_t priv;
 	static uintRSA_t base,publexp,modulus,result;
+//	const memword_t golden[3*NUM_MEMWORDS] = {}
 
 	switch(mode)
 	{
 	case DECRYPTKEYINIT:
+		*mode_out = 2;
 		cout << "mode = DECRYPTKEYINIT" << endl;
 		for (int i=0; i<NUM_MEMWORDS; i++)
 		{
@@ -23,10 +25,10 @@ void wsrsa1024( memword_t privexp[NUM_MEMWORDS],  // private exponent
 				priv >>= MEMWORD_SIZE;
 		}
 //		*result = 0;
-		*mode_out = 2;
 		break;
 
 	case INIT:
+		*mode_out = 3;
 		for (int i=0; i<NUM_MEMWORDS; i++)
 		{
 			base.range(NUM_BITS-1,(NUM_BITS)-MEMWORD_SIZE) = base_mem[i];
@@ -44,6 +46,7 @@ void wsrsa1024( memword_t privexp[NUM_MEMWORDS],  // private exponent
 
 
 	case DECRYPT:
+		*mode_out = 1;
 		cout << "mode = DECRYPT" << endl;
 		rsaModExp(base,priv,modulus,&result);
 		for (int i=0; i<NUM_MEMWORDS; i++)
@@ -52,11 +55,11 @@ void wsrsa1024( memword_t privexp[NUM_MEMWORDS],  // private exponent
 			if (i!=NUM_MEMWORDS-1)
 				result >>= MEMWORD_SIZE;
 		}
-		*mode_out = 1;
 		break;
 
 	case ENCRYPT:
 	default:
+		*mode_out = 0;
 		cout << "mode = ENCRYPT" << endl;
 		rsaModExp(base,publexp,modulus,&result);
 		for (int i=0; i<NUM_MEMWORDS; i++)
@@ -65,7 +68,6 @@ void wsrsa1024( memword_t privexp[NUM_MEMWORDS],  // private exponent
 			if (i!=NUM_MEMWORDS-1)
 				result >>= MEMWORD_SIZE;
 		}
-		*mode_out = 0;
 		break;
 
 	}

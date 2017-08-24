@@ -129,35 +129,24 @@ int main()
 		return 1;
 	}
 #endif
+//
+//	cout << "uint32_t publexp_arr[]  = ";printWords(pub_exp,false);
+//	cout << "uint32_t modulus_arr[] = ";printWords(modulus,false);
+//	cout << "uint32_t ciphertext_golden_ans[] = ";printWords(ciphertext,false);
+//	cout << "uint32_t plaintext_golden_ans[] = ";printWords(plaintext,false);
+//	cout << "ENDIAN SWAP" << endl;
+//	cout << "uint32_t publexp_arr[]  = ";printWords(pub_exp,true);
+//	cout << "uint32_t modulus_arr[] = ";printWords(modulus,true);
+//	cout << "uint32_t ciphertext_golden_ans[] = ";printWords(ciphertext,true);
+//	cout << "uint32_t plaintext_golden_ans[] = ";printWords(plaintext,true);
 
 
-	//	uintRSA_t Mbar0=0,xbar0;
-	//	ap_uint<NUM_BITS+1> r = ap_uint<NUM_BITS+1>("10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",16);
-	//	interleaveModMult(r,M,n,&Mbar0);
-	//	interleaveModMult(r,ap_uint<NUM_BITS>(1),n,&xbar0);
-	//
-	//	if ((Mbar0 != Mbar) || (xbar0 != xbar))
-	//	{
-	//		cout << "FAILURE" << endl;
-	//		returnval = 1;
-	//	}
-	//	else
-	//		cout << "SUCCESS!" << endl;
+	memword_t priv_mem[NUM_MEMWORDS];
+	memword_t plaintext_mem[NUM_MEMWORDS];
+	memword_t publexp_mem[NUM_MEMWORDS];
+	memword_t modulus_mem[NUM_MEMWORDS];
+	memword_t ciphertext_mem[NUM_MEMWORDS];
 
-
-	cout << "uint32_t publexp_arr[]  = ";printWords(pub_exp,false);
-	cout << "uint32_t modulus_arr[] = ";printWords(modulus,false);
-	cout << "uint32_t ciphertext_golden_ans[] = ";printWords(ciphertext,false);
-	cout << "uint32_t plaintext_golden_ans[] = ";printWords(plaintext,false);
-	cout << "ENDIAN SWAP" << endl;
-	cout << "uint32_t publexp_arr[]  = ";printWords(pub_exp,true);
-	cout << "uint32_t modulus_arr[] = ";printWords(modulus,true);
-	cout << "uint32_t ciphertext_golden_ans[] = ";printWords(ciphertext,true);
-	cout << "uint32_t plaintext_golden_ans[] = ";printWords(plaintext,true);
-
-
-	memword_t priv_mem[NUM_MEMWORDS],plaintext_mem[NUM_MEMWORDS],
-		      publexp_mem[NUM_MEMWORDS],modulus_mem[NUM_MEMWORDS],ciphertext_mem[NUM_MEMWORDS];
 	for (int i=0; i<NUM_MEMWORDS; i++) {
 		priv_mem[i] = priv_exp.range(MEMWORD_SIZE*i+(MEMWORD_SIZE-1),MEMWORD_SIZE*i);
 		plaintext_mem[i] = plaintext.range(MEMWORD_SIZE*i+(MEMWORD_SIZE-1),MEMWORD_SIZE*i);
@@ -166,10 +155,10 @@ int main()
 		ciphertext_mem[i] = ciphertext.range(MEMWORD_SIZE*i+(MEMWORD_SIZE-1),MEMWORD_SIZE*i);
 	}
 
-	memword_t enc_res[NUM_MEMWORDS]=0,dec_res[NUM_MEMWORDS]=0;
+	memword_t enc_res[NUM_MEMWORDS]=0;
+	memword_t dec_res[NUM_MEMWORDS]=0;
 	ap_uint<4> mode_out;
 
-	//	rsaModExp(M,e,n,r,&res);
 	RSAmode_t mode = INIT;
 	wsrsa1024(priv_mem,mode,plaintext_mem,publexp_mem,modulus_mem,enc_res,&mode_out);
 
