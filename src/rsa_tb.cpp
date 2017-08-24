@@ -158,14 +158,13 @@ int main()
 	memword_t enc_res[NUM_MEMWORDS]=0;
 	memword_t dec_res[NUM_MEMWORDS]=0;
 	ap_uint<4> mode_out;
-	ap_uint<5> iter;
-	ap_uint<3> gf;
+	memword_t result_out;
 
 	RSAmode_t mode = INIT;
-	wsrsa1024(priv_mem,mode,plaintext_mem,publexp_mem,modulus_mem,enc_res,    &gf, &iter, &mode_out);
+	wsrsa1024(priv_mem,mode,plaintext_mem,publexp_mem,modulus_mem,enc_res, &result_out, &mode_out);
 
 	mode = ENCRYPT;
-	wsrsa1024(priv_mem,mode,plaintext_mem,publexp_mem,modulus_mem,enc_res,    &gf, &iter, &mode_out);
+	wsrsa1024(priv_mem,mode,plaintext_mem,publexp_mem,modulus_mem,enc_res, &result_out, &mode_out);
 	cout << "enc result = " << hex << enc_res << endl;
 	if (0 != memcmp(enc_res,ciphertext_mem,sizeof(enc_res)) )
 	{
@@ -174,12 +173,12 @@ int main()
 	}
 
 	mode = DECRYPTKEYINIT;
-	wsrsa1024(priv_mem,mode,ciphertext_mem,publexp_mem,modulus_mem,dec_res,    &gf, &iter, &mode_out);
+	wsrsa1024(priv_mem,mode,ciphertext_mem,publexp_mem,modulus_mem,dec_res, &result_out, &mode_out);
 	mode = INIT;
-	wsrsa1024(priv_mem,mode,ciphertext_mem,publexp_mem,modulus_mem,dec_res,&gf, &iter, &mode_out);
+	wsrsa1024(priv_mem,mode,ciphertext_mem,publexp_mem,modulus_mem,dec_res, &result_out, &mode_out);
 
 	mode = DECRYPT;
-	wsrsa1024(priv_mem,mode,ciphertext_mem,publexp_mem,modulus_mem,dec_res, &gf, &iter, &mode_out);
+	wsrsa1024(priv_mem,mode,ciphertext_mem,publexp_mem,modulus_mem,dec_res, &result_out, &mode_out);
 	cout << "dec result = " << hex << dec_res << endl;
 	if (0 != memcmp(dec_res,plaintext_mem,sizeof(enc_res)) )
 	{

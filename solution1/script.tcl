@@ -17,7 +17,7 @@ add_files testrsa/src/globals.hpp
 add_files -tb testrsa/src/rsa_tb.cpp
 open_solution "solution1"
 set_part {xc7z020clg484-1} -tool vivado
-create_clock -period 10 -name default
+create_clock -period 20 -name default
 source "./testrsa/solution1/directives.tcl"
 csim_design -clean -compiler gcc
 csynth_design
