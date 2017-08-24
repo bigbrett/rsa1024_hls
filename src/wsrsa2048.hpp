@@ -12,6 +12,8 @@ void wsrsa1024( memword_t privexp[NUM_MEMWORDS],  // private exponent
 				memword_t publexp_mem[NUM_MEMWORDS],
 				memword_t modulus_mem[NUM_MEMWORDS],
 				memword_t result_mem[NUM_MEMWORDS],
+                ap_uint<3> *golden_flag,
+                ap_uint<5> *iter,
 				ap_uint<4> *mode_out);
 
 #endif
