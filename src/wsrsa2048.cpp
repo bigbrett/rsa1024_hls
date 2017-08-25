@@ -8,6 +8,7 @@ void wsrsa1024(
 		memword_t base_mem[NUM_MEMWORDS],
 		memword_t publexp_mem[NUM_MEMWORDS],
 		memword_t modulus_mem[NUM_MEMWORDS],
+		uintRSA_t *xbar_dbg,
 		memword_t result_mem[NUM_MEMWORDS])
 {
 #pragma HLS ALLOCATION instances=montMult limit=1 function
@@ -44,16 +45,22 @@ void wsrsa1024(
 //	interleaveModMult(r,uintRSA_t(1),modulus,&xbar);
 //	cout << hex << "xbar = " << xbar << endl;
 	// compute montgomery modular exponentiation using square and multiply algorithm
-	int i;
-	uintRSA_t xbar = xbar0;
-	for (i=NUM_BITS-1; i>=0; i--)
+
+		uintRSA_t xbar = xbar0;
+	cout << "xbars:" << endl;
+	for (int i=NUM_BITS-1; i>=0; i--)
 	{
 		montMult(xbar,xbar,modulus,&xbar); // square
-		if (publexp.test(i))
+		if (publexp.test(i)) {
 			montMult(Mbar,xbar,modulus,&xbar); // multiply
+			cout << "**";
+		}
+		cout << "xbar["<<dec<<i<<"] = " << hex << xbar << endl;
+		*xbar_dbg = xbar;
 	}
 	// undo montgomery transform
 	montMult(xbar,1,modulus,&result);
+	*xbar_dbg = result;
 
 	// copy outputs to AXI memory
 	for (int i=0; i<NUM_MEMWORDS; i++)

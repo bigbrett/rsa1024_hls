@@ -27,6 +27,7 @@ int main()
 
 	// memory for result
 	memword_t enc_res[NUM_MEMWORDS]=0;
+	uintRSA_t xbar_dbg;
 
 	// copy input operands into memory
 	for (int i=0; i<NUM_MEMWORDS; i++) {
@@ -37,7 +38,7 @@ int main()
 	}
 
 	// Encrypt data using DUT
-	wsrsa1024(plaintext_mem,publexp_mem,modulus_mem,enc_res);
+	wsrsa1024(plaintext_mem,publexp_mem,modulus_mem, &xbar_dbg, enc_res);
 
 	// check results against golden truth
 	if (0 != memcmp(enc_res,ciphertext_mem,sizeof(enc_res)) )
