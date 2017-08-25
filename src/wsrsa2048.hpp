@@ -2,7 +2,8 @@
 #define WSRSA2048_HPP_
 
 #include "globals.hpp"
-#include "rsaModExp.hpp"
+//#include "interleaveModMult.hpp"
+#include "montMult.hpp"
 
 typedef enum { ENCRYPT=0, DECRYPT=1, DECRYPTKEYINIT=2, INIT=3} RSAmode_t;
 
