@@ -9,3 +9,5 @@ set_directive_interface -mode s_axilite "wsrsa1024" modulus_mem
 set_directive_interface -mode s_axilite "wsrsa1024" publexp_mem
 set_directive_interface -mode s_axilite "wsrsa1024"
 set_directive_interface -mode ap_vld "wsrsa1024" xbar_dbg
+set_directive_interface -mode s_axilite "wsrsa1024" xbar0
+set_directive_interface -mode s_axilite "wsrsa1024" Mbar0

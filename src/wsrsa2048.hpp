@@ -12,9 +12,10 @@ void wsrsa1024(
 		memword_t base_mem[NUM_MEMWORDS],
 		memword_t publexp_mem[NUM_MEMWORDS],
 		memword_t modulus_mem[NUM_MEMWORDS],
+		memword_t Mbar[NUM_MEMWORDS],
+		memword_t xbar0[NUM_MEMWORDS],
 		uintRSA_t *xbar_dbg,
 		memword_t result_mem[NUM_MEMWORDS]);
-
 
 
 #endif
